@@ -7,8 +7,8 @@
 
 import Foundation
 
-// MARK: - Welcome
-struct Image: Codable {
+// MARK: - ImageModel
+struct ImageModel: Codable {
     let meta: Meta
     let documents: [Document]
 }

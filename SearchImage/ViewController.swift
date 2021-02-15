@@ -6,10 +6,13 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
+
 
 class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    var images: [Image] = []
+    let viewModel = ImageListViewModel()
     
     let cellIndentifier = "cell"
     @IBOutlet weak var collectionView: UICollectionView!
@@ -17,18 +20,22 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 //        return images.count
-        return 30
+        return viewModel.images.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if let cell:ImageCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: self.cellIndentifier, for: indexPath) as? ImageCollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.cellIndentifier, for: indexPath) as! ImageCollectionViewCell
+        let image = viewModel.images[indexPath.row]
+        
+//            fetchImages("hi")
+            
+//            RequsetAPI.fetchImages("hi", onComplete: (Result<Data, Error>) -> Void)
+            
 //            let image: Image = self.images[indexPath.item]
 //
 //            cell.cellImage.image = UIImage(contentsOfFile: image.documents[indexPath.row].thumbnailURL)
 //
             return cell
-        }
-        return UICollectionViewCell()
     }
     
 
@@ -50,7 +57,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         flowLayout.minimumLineSpacing = interval
         let width: CGFloat = ( UIScreen.main.bounds.width - interval) / 3
         flowLayout.itemSize = CGSize(width: width - interval, height: width - interval)
-        //        flowLayout.estimatedItemSize = CGSize(width: 150, height: 110)
         self.collectionView.collectionViewLayout = flowLayout
     }
 }
