@@ -17,15 +17,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <searchBar contentMode="redraw" placeholder="검색할 이미지 이름을 입력해주세요." translatesAutoresizingMaskIntoConstraints="NO" id="yax-mn-msX">
-                                <rect key="frame" x="0.0" y="140" width="414" height="44"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="Akf-Cq-PRr"/>
-                                </constraints>
-                                <textInputTraits key="textInputTraits"/>
-                            </searchBar>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="cdZ-lK-oQe">
-                                <rect key="frame" x="0.0" y="184" width="414" height="678"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="tFP-lD-gvR">
                                     <size key="itemSize" width="128" height="128"/>
@@ -59,7 +52,6 @@
                                     </collectionViewCell>
                                 </cells>
                                 <connections>
-                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="dx0-qR-bJ9"/>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="2DR-Wm-q5z"/>
                                 </connections>
                             </collectionView>
@@ -67,18 +59,15 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="yax-mn-msX" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="4Wf-Y9-3Jb"/>
+                            <constraint firstItem="cdZ-lK-oQe" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="0yf-vE-9F1"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="cdZ-lK-oQe" secondAttribute="trailing" id="BHQ-Ss-uQa"/>
                             <constraint firstItem="cdZ-lK-oQe" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="CSr-m9-TEl"/>
-                            <constraint firstItem="yax-mn-msX" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="RvC-Va-KGj"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="cdZ-lK-oQe" secondAttribute="bottom" id="f9z-5O-yVs"/>
-                            <constraint firstItem="yax-mn-msX" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="rOb-jO-KUP"/>
-                            <constraint firstItem="cdZ-lK-oQe" firstAttribute="top" secondItem="yax-mn-msX" secondAttribute="bottom" id="vea-az-yTq"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Search Image" id="17Y-0D-La7"/>
                     <connections>
-                        <outlet property="collectionView" destination="cdZ-lK-oQe" id="RJY-nH-JrW"/>
+                        <outlet property="collectionView" destination="cdZ-lK-oQe" id="8Xp-Jb-z8c"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

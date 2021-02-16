@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - ImageModel
-struct ImageModel: Codable {
+struct Model: Codable {
     let meta: Meta
     let documents: [Document]
 }
