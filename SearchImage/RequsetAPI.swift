@@ -10,13 +10,13 @@ import RxSwift
 import RxRelay
 
 class RequsetAPI{
-    static func fetchImages(_ keyword: String, onComplete: @escaping (Result<Data, Error>) -> Void ) {
+    static func fetchImages(_ keyword: BehaviorSubject<String>, onComplete: @escaping (Result<Data, Error>) -> Void ) {
         let pageNum:Int = 1
         let size: Int = 30
-//        var keywordString: String = " "
-//        keyword.subscribe{ keywordString = $0 }.disposed(by: DisposeBag())
+        var keywordString: String = " "
+        keyword.subscribe{ keywordString = $0 }.disposed(by: DisposeBag())
 //        print(keywordString)
-        let urlString: String =  "https://dapi.kakao.com/v2/search/image?sort=accuracy&page=\(pageNum)&query=\(keyword)&size=\(size)"
+        let urlString: String =  "https://dapi.kakao.com/v2/search/image?sort=accuracy&page=\(pageNum)&query=\(keywordString)&size=\(size)"
         let encodedString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let url = URL(string: encodedString)!
         var request = URLRequest(url: url)
@@ -36,21 +36,21 @@ class RequsetAPI{
                                                 userInfo: nil)))
                     return
                 }
-                print("dataTask")
+//                print("dataTask")
                 onComplete(.success(data))
-                print("dataTask complete")
+//                print("dataTask complete")
             }.resume()
     }
     
     //rx를 이용한 리팩토링 코드
-    static func fetchImagesRx(_ keyword: String) -> Observable<Data> {
+    static func fetchImagesRx(_ keyword: BehaviorSubject<String>) -> Observable<Data> {
+        
         return Observable.create() { emitter in
-            
             //레거시 코드
             fetchImages(keyword) { result in
                 switch result{
                 case let .success(data):
-                    print("observable로 데이터 전달")
+//                    print("observable로 데이터 전달")
 //                    keyword.subscribe{print($0)}.disposed(by: DisposeBag())
                     emitter.onNext(data)
                     emitter.onCompleted()
@@ -58,6 +58,7 @@ class RequsetAPI{
                     emitter.onError(err)
                 }
             }
+            
             return Disposables.create()
             
         }

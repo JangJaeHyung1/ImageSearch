@@ -35,6 +35,7 @@ class ViewController: UIViewController{
         
         viewModel.imagesObservable
             .observe(on: MainScheduler.instance)
+            .debounce(.seconds(1), scheduler: MainScheduler.instance)
             .bind(to: collectionView.rx.items(cellIdentifier: cellIndentifier, cellType: ImageCollectionViewCell.self)) { index, item, cell in
                 let data = try? Data(contentsOf: URL(string: item.thumbnailURL)!)
                 cell.cellImage.image = UIImage(data: data!)
@@ -67,10 +68,22 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UISearchResultsUpd
 //        dump(searchController.searchBar.text)
         if let keyword = searchController.searchBar.text{
 //            print(keyword)
-//            viewModel.searchKeyword.onNext(keyword)
+            viewModel.searchKeyword.onNext(keyword)
+
+//            viewModel.searchKeyword
+//                .debounce(.seconds(1), scheduler: MainScheduler.instance)
+//                .subscribe(onNext: {
+//                            self.viewModel.searchKeyword.onNext(keyword)}
+//                )}
+
+                
+                
+
+                
+                
 //            print(viewModel.searchKeyword)
-//            viewModel.fetchRequset(searchKeyword: viewModel.searchKeyword)
-            viewModel.fetchRequset(searchKeyword: keyword)
+            viewModel.fetchRequset(searchKeyword: viewModel.searchKeyword)
+//            viewModel.fetchRequset(searchKeyword: keyword)
             
 //            viewModel.searchKeyword.subscribe{print($0)}.disposed(by: disposeBag)
             
