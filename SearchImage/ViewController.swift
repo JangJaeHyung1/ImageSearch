@@ -10,36 +10,20 @@ import RxSwift
 import RxCocoa
 
 
-class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class ViewController: UIViewController{
+
     @IBOutlet weak var collectionView: UICollectionView!
     
     var disposeBag = DisposeBag()
     let viewModel = ImageListViewModel()
-    
     let cellIndentifier = "cell"
     
-    
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return images.count
-//        return viewModel.images.count
-//    }
-    
-    
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.cellIndentifier, for: indexPath) as! ImageCollectionViewCell
-//        let image = viewModel.images[indexPath.row]
-//
-//            fetchImages("hi")
-//
-//            RequsetAPI.fetchImages("hi", onComplete: (Result<Data, Error>) -> Void)
-//
-//            let image: Image = self.images[indexPath.item]
-//
-//            cell.cellImage.image = UIImage(contentsOfFile: image.documents[indexPath.row].thumbnailURL)
-//
-//            return cell
-//    }
-    
+    var isSearching: Bool {
+        let searchController = self.navigationItem.searchController
+        let isActive = searchController?.isActive ?? false
+        let isSearchBarHasText = searchController?.searchBar.text?.isEmpty == false
+        return isActive && isSearchBarHasText
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,21 +40,15 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                 cell.cellImage.image = UIImage(data: data!)
             }
             .disposed(by: disposeBag)
-        
     }
     
-    func setupSearchController() {
-        let searchController = UISearchController(searchResultsController: nil)
-        searchController.searchBar.placeholder = "검색할 키워드를 입력해 주세요."
-        searchController.hidesNavigationBarDuringPresentation = false
-        self.navigationItem.searchController = searchController
-        self.navigationItem.title = "Daum 이미지 검색"
-        self.navigationItem.hidesSearchBarWhenScrolling = false
+    
+    
 
-    }
-
-
-
+    
+}
+extension ViewController: UICollectionViewDelegateFlowLayout, UISearchResultsUpdating{
+    
     func collectionCellUI(){
         let interval:CGFloat = 5
         let flowLayout: UICollectionViewFlowLayout
@@ -83,5 +61,48 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         self.collectionView.collectionViewLayout = flowLayout
         self.collectionView.reloadData()
     }
+    
+    
+    func updateSearchResults(for searchController: UISearchController) {
+//        dump(searchController.searchBar.text)
+        if let keyword = searchController.searchBar.text{
+//            print(keyword)
+//            viewModel.searchKeyword.onNext(keyword)
+//            print(viewModel.searchKeyword)
+//            viewModel.fetchRequset(searchKeyword: viewModel.searchKeyword)
+            viewModel.fetchRequset(searchKeyword: keyword)
+            
+//            viewModel.searchKeyword.subscribe{print($0)}.disposed(by: disposeBag)
+            
+//            viewModel.imagesObservable.subscribe{print($0)}.disposed(by: disposeBag)
+            
+//            viewModel.imagesObservable
+//            _ = RequsetAPI.fetchImagesRx(keyword)
+//                .map { data -> [Document] in
+//                    struct Response: Decodable {
+//                        var meta: Meta
+//                        var documents: [Document]
+//                        //JSON 데이터의 배열이름과 동일해야 함
+//                    }
+//                    let response = try! JSONDecoder().decode(Response.self, from: data)
+//                    return response.documents
+//                }
+//                .bind(to: imagesObservable)
+            
+        }
+        
+    }
+    
+    func setupSearchController() {
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "검색할 키워드를 입력해 주세요."
+        searchController.hidesNavigationBarDuringPresentation = false
+        
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationItem.searchController = searchController
+        self.navigationItem.title = "Daum 이미지 검색"
+        self.navigationItem.hidesSearchBarWhenScrolling = false
+    }
 }
-
