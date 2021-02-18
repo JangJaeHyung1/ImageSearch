@@ -33,18 +33,15 @@ class ViewController: UIViewController{
 
         collectionCellUI()
         
-        viewModel.imagesObservable
+        viewModel.searchResult
             .observe(on: MainScheduler.instance)
-            .debounce(.seconds(1), scheduler: MainScheduler.instance)
             .bind(to: collectionView.rx.items(cellIdentifier: cellIndentifier, cellType: ImageCollectionViewCell.self)) { index, item, cell in
                 let data = try? Data(contentsOf: URL(string: item.thumbnailURL)!)
                 cell.cellImage.image = UIImage(data: data!)
+                cell.layer.cornerRadius = 2
             }
             .disposed(by: disposeBag)
     }
-    
-    
-    
 
     
 }
@@ -59,49 +56,15 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UISearchResultsUpd
         flowLayout.minimumLineSpacing = interval
         let width: CGFloat = ( UIScreen.main.bounds.width - interval) / 3
         flowLayout.itemSize = CGSize(width: width - interval, height: width - interval)
+        
         self.collectionView.collectionViewLayout = flowLayout
         self.collectionView.reloadData()
     }
     
     
     func updateSearchResults(for searchController: UISearchController) {
-//        dump(searchController.searchBar.text)
         if let keyword = searchController.searchBar.text{
-//            print(keyword)
-            viewModel.searchKeyword.onNext(keyword)
-
-//            viewModel.searchKeyword
-//                .debounce(.seconds(1), scheduler: MainScheduler.instance)
-//                .subscribe(onNext: {
-//                            self.viewModel.searchKeyword.onNext(keyword)}
-//                )}
-
-                
-                
-
-                
-                
-//            print(viewModel.searchKeyword)
-            viewModel.fetchRequset(searchKeyword: viewModel.searchKeyword)
-//            viewModel.fetchRequset(searchKeyword: keyword)
-            
-//            viewModel.searchKeyword.subscribe{print($0)}.disposed(by: disposeBag)
-            
-//            viewModel.imagesObservable.subscribe{print($0)}.disposed(by: disposeBag)
-            
-//            viewModel.imagesObservable
-//            _ = RequsetAPI.fetchImagesRx(keyword)
-//                .map { data -> [Document] in
-//                    struct Response: Decodable {
-//                        var meta: Meta
-//                        var documents: [Document]
-//                        //JSON 데이터의 배열이름과 동일해야 함
-//                    }
-//                    let response = try! JSONDecoder().decode(Response.self, from: data)
-//                    return response.documents
-//                }
-//                .bind(to: imagesObservable)
-            
+            viewModel.searchKeyword.accept(keyword)
         }
         
     }
