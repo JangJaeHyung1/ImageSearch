@@ -86,11 +86,64 @@
                     <connections>
                         <outlet property="collectionView" destination="cdZ-lK-oQe" id="8Xp-Jb-z8c"/>
                         <outlet property="lblSearchFlag" destination="a1o-h9-zeE" id="tWr-7r-RCS"/>
+                        <segue destination="QYl-FC-hkr" kind="show" identifier="DetailViewController" id="lJk-Wv-sSE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="886.95652173913049" y="71.651785714285708"/>
+        </scene>
+        <!--Detail View Controller-->
+        <scene sceneID="vF6-eY-YhS">
+            <objects>
+                <viewController id="QYl-FC-hkr" customClass="DetailViewController" customModule="SearchImage" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ugt-uj-xcs">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="이미지 출처 : " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4NZ-em-E8U">
+                                <rect key="frame" x="30" y="622" width="354" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Udi-AH-O7Z">
+                                <rect key="frame" x="30" y="781" width="354" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" systemColor="systemGrayColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8Uc-zR-oSL">
+                                <rect key="frame" x="20" y="188" width="374" height="374"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="8Uc-zR-oSL" secondAttribute="height" multiplier="1:1" id="vUS-yW-gyu"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="X80-Th-ijA"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="X80-Th-ijA" firstAttribute="trailing" secondItem="Udi-AH-O7Z" secondAttribute="trailing" constant="30" id="D7n-QA-sdY"/>
+                            <constraint firstItem="8Uc-zR-oSL" firstAttribute="leading" secondItem="X80-Th-ijA" secondAttribute="leading" constant="20" id="FeJ-jS-Q7M"/>
+                            <constraint firstItem="4NZ-em-E8U" firstAttribute="top" secondItem="8Uc-zR-oSL" secondAttribute="bottom" constant="60" id="Ihf-fJ-xQq"/>
+                            <constraint firstItem="X80-Th-ijA" firstAttribute="trailing" secondItem="8Uc-zR-oSL" secondAttribute="trailing" constant="20" id="Jff-K5-6Xf"/>
+                            <constraint firstItem="4NZ-em-E8U" firstAttribute="leading" secondItem="X80-Th-ijA" secondAttribute="leading" constant="30" id="LNf-Am-CLQ"/>
+                            <constraint firstItem="X80-Th-ijA" firstAttribute="trailing" secondItem="4NZ-em-E8U" secondAttribute="trailing" constant="30" id="Xwk-4k-Ez8"/>
+                            <constraint firstItem="8Uc-zR-oSL" firstAttribute="top" secondItem="X80-Th-ijA" secondAttribute="top" constant="100" id="YcE-CJ-MUu"/>
+                            <constraint firstItem="Udi-AH-O7Z" firstAttribute="leading" secondItem="X80-Th-ijA" secondAttribute="leading" constant="30" id="sb1-OJ-nCr"/>
+                            <constraint firstItem="X80-Th-ijA" firstAttribute="bottom" secondItem="Udi-AH-O7Z" secondAttribute="bottom" constant="60" id="vBR-zn-vPf"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="oys-cA-dp2"/>
+                    <connections>
+                        <outlet property="imageView" destination="8Uc-zR-oSL" id="Q9S-ev-ni0"/>
+                        <outlet property="lblDate" destination="Udi-AH-O7Z" id="v8g-yO-9kH"/>
+                        <outlet property="lblSite" destination="4NZ-em-E8U" id="6qb-ND-xYg"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SlW-Rc-RCg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1688.4057971014495" y="67.633928571428569"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="W7U-3D-Cqx">
@@ -117,6 +170,9 @@
         </systemColor>
         <systemColor name="systemGray6Color">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemGrayColor">
+            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

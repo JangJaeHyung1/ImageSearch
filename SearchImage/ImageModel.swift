@@ -21,7 +21,7 @@ struct Document: Codable {
     let width, height: Int
     let displaySitename: String
     let docURL: String
-    let datetime: String
+    let datetime: Date
 
     enum CodingKeys: String, CodingKey {
         case collection

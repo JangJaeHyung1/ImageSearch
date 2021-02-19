@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+//import RxViewController
 
 
 class ViewController: UIViewController{
@@ -41,19 +42,44 @@ class ViewController: UIViewController{
                 let data = try? Data(contentsOf: URL(string: item.thumbnailURL)!)
                 cell.cellImage.image = UIImage(data: data!)
                 cell.layer.cornerRadius = 2
-                
             }
+            .disposed(by: disposeBag)
+        
+        Observable.zip(collectionView.rx.itemSelected, collectionView.rx.modelSelected(Document.self))
+            .bind{ [weak self] indexPath, model in
+                self?.collectionView.deselectItem(at: indexPath, animated: true)
+                self?.viewModel.showDetailViewImage.accept(model)
+            }.disposed(by: disposeBag)
+        
+        viewModel.showDetailViewImage
+            .subscribe(onNext: { [weak self] document in
+                self?.performSegue(withIdentifier: DetailViewController.identifier,
+                                   sender: document)
+            })
             .disposed(by: disposeBag)
         
         viewModel.searchFlag
             .bind(to: lblSearchFlag.rx.isHidden)
             .disposed(by: disposeBag)
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
+        if segue.identifier == DetailViewController.identifier {
+            let vc = segue.destination as? DetailViewController
+            if let document = sender as? Document{
+                vc?.document = document
+//                vc?.date = timeDecode(document.datetime)
+//                vc?.imageUrl = document.imageURL
+//                vc?.site = document.displaySitename
+//                print(document)
+            }
 
-    func searchNothing(){
-//        검색결과가 없습니다.
-//        lblSearchFlag.isHidden = false
+        }
     }
+    
+    
     
 }
 extension ViewController: UICollectionViewDelegateFlowLayout, UISearchResultsUpdating{
@@ -98,3 +124,6 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UISearchResultsUpd
         self.navigationItem.hidesSearchBarWhenScrolling = false
     }
 }
+
+
+

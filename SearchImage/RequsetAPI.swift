@@ -46,7 +46,12 @@ class RequsetAPI{
                         var meta: Meta
                         var documents: [Document]
                     }
-                    if let response = try? JSONDecoder().decode(Response.self, from: data){
+                    let decoder = JSONDecoder()
+                    decoder.dateDecodingStrategy = .iso8601
+                    decoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601)
+                    
+                    
+                    if let response = try? decoder.decode(Response.self, from: data){
                         emitter.onNext(response.documents)
                         emitter.onCompleted()
                     }
@@ -61,4 +66,23 @@ class RequsetAPI{
     }
 }
 
+extension DateFormatter {
 
+    static let iso8601: DateFormatter = {
+
+        let formatter = DateFormatter()
+
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXXXX"
+//        formatter.dateFormat = "yyyy-MM-dd"
+        
+        formatter.calendar = Calendar(identifier: .iso8601)
+
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+
+        formatter.locale = Locale(identifier: "ko_kr")
+
+        return formatter
+
+    }()
+
+}

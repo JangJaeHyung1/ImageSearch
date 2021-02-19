@@ -14,6 +14,9 @@ class ImageListViewModel {
     var searchKeyword = PublishRelay<String>()
     var searchFlag = PublishRelay<Bool>()
     
+    var showDetailViewImage = PublishRelay<Document>()
+//        var showDetailView = PublishRelay<Document>()
+    
     init (){
         searchKeyword.debounce(.seconds(1), scheduler: MainScheduler.instance).flatMap( RequsetAPI.fetchImagesRx(_:) ).subscribe(onNext:{ self.searchResult.accept($0) })
         
