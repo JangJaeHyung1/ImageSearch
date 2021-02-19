@@ -10,23 +10,28 @@ import RxSwift
 import RxRelay
 
 class ImageListViewModel {
-    var searchResult = BehaviorRelay<[Document]>(value: [])
-    var searchKeyword = BehaviorRelay<String>(value: " ")
+    var searchResult = PublishRelay<[Document]>()
+    var searchKeyword = PublishRelay<String>()
+    var searchFlag = PublishRelay<Bool>()
     
     init (){
-        searchKeyword.debounce(.seconds(1), scheduler: MainScheduler.instance).flatMap( fetchRequest ).subscribe(onNext:{ self.searchResult.accept($0) })
+        searchKeyword.debounce(.seconds(1), scheduler: MainScheduler.instance).flatMap( RequsetAPI.fetchImagesRx(_:) ).subscribe(onNext:{ self.searchResult.accept($0) })
+        
+        searchResult.flatMap(emptyCheck(_:)).subscribe(onNext:{self.searchFlag.accept($0)})
+    }
+    func emptyCheck(_ result: [Document]) -> Observable<Bool>{
+        return Observable.create(){ emitter in
+            if result.count == 0 {
+                emitter.onNext(false)
+                emitter.onCompleted()
+            }
+            emitter.onNext(true)
+            emitter.onCompleted()
+            return Disposables.create()
+        }
+        
+        
     }
     
-    func fetchRequest(_ keyword: String) -> Observable<[Document]>{
-        return RequsetAPI.fetchImagesRx(keyword).map { data -> [Document] in
-            struct Response: Decodable {
-                var meta: Meta
-                var documents: [Document]
-            }
-            if let response = try? JSONDecoder().decode(Response.self, from: data){
-                return response.documents
-            }
-            return []
-        }
-    }
+  
 }

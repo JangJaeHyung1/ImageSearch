@@ -14,20 +14,22 @@ class ViewController: UIViewController{
 
     @IBOutlet weak var collectionView: UICollectionView!
     
+    @IBOutlet weak var lblSearchFlag: UILabel!
     var disposeBag = DisposeBag()
     let viewModel = ImageListViewModel()
     let cellIndentifier = "cell"
+    var emptySearchFlag = true
     
     var isSearching: Bool {
-        let searchController = self.navigationItem.searchController
-        let isActive = searchController?.isActive ?? false
-        let isSearchBarHasText = searchController?.searchBar.text?.isEmpty == false
-        return isActive && isSearchBarHasText
-    }
-
+            let searchController = self.navigationItem.searchController
+            let isActive = searchController?.isActive ?? false
+            let isSearchBarHasText = searchController?.searchBar.text?.isEmpty == false
+            return isActive && isSearchBarHasText
+        }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
         // Do any additional setup after loading the view.
         self.setupSearchController()
 
@@ -39,10 +41,19 @@ class ViewController: UIViewController{
                 let data = try? Data(contentsOf: URL(string: item.thumbnailURL)!)
                 cell.cellImage.image = UIImage(data: data!)
                 cell.layer.cornerRadius = 2
+                
             }
+            .disposed(by: disposeBag)
+        
+        viewModel.searchFlag
+            .bind(to: lblSearchFlag.rx.isHidden)
             .disposed(by: disposeBag)
     }
 
+    func searchNothing(){
+//        검색결과가 없습니다.
+//        lblSearchFlag.isHidden = false
+    }
     
 }
 extension ViewController: UICollectionViewDelegateFlowLayout, UISearchResultsUpdating{
@@ -64,9 +75,14 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UISearchResultsUpd
     
     func updateSearchResults(for searchController: UISearchController) {
         if let keyword = searchController.searchBar.text{
-            viewModel.searchKeyword.accept(keyword)
+            if keyword.count == 0{
+                viewModel.searchResult.accept([])
+            }
+            else{
+                viewModel.searchKeyword.accept(keyword)
+            }
         }
-        
+        viewModel.searchFlag.accept(true)
     }
     
     func setupSearchController() {

@@ -26,6 +26,23 @@
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
+                                <view key="backgroundView" contentMode="scaleToFill" id="jRO-jC-Qig">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="774"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" alpha="0.59999999999999998" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="검색결과가 없습니다." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a1o-h9-zeE">
+                                            <rect key="frame" x="136.5" y="353" width="141.5" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="a1o-h9-zeE" secondAttribute="bottom" constant="400" id="cuP-RZ-VZk"/>
+                                        <constraint firstItem="a1o-h9-zeE" firstAttribute="centerX" secondItem="jRO-jC-Qig" secondAttribute="centerX" id="wsI-g2-vxr"/>
+                                    </constraints>
+                                </view>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell" id="iGJ-b1-pMx" customClass="ImageCollectionViewCell" customModule="SearchImage" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
@@ -68,6 +85,7 @@
                     <navigationItem key="navigationItem" title="Search Image" id="17Y-0D-La7"/>
                     <connections>
                         <outlet property="collectionView" destination="cdZ-lK-oQe" id="8Xp-Jb-z8c"/>
+                        <outlet property="lblSearchFlag" destination="a1o-h9-zeE" id="tWr-7r-RCS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

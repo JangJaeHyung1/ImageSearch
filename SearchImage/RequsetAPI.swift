@@ -36,22 +36,27 @@ class RequsetAPI{
             }.resume()
     }
     
-    //rx를 이용한 리팩토링 코드
-    static func fetchImagesRx(_ keyword: String) -> Observable<Data> {
 
+    static func fetchImagesRx(_ keyword: String) -> Observable<[Document]> {
         return Observable.create() { emitter in
             fetchImages(keyword) { result in
                 switch result{
                 case let .success(data):
-                    emitter.onNext(data)
+                    struct Response: Decodable {
+                        var meta: Meta
+                        var documents: [Document]
+                    }
+                    if let response = try? JSONDecoder().decode(Response.self, from: data){
+                        emitter.onNext(response.documents)
+                        emitter.onCompleted()
+                    }
+                    emitter.onNext([])
                     emitter.onCompleted()
                 case let .failure(err):
                     emitter.onError(err)
                 }
             }
-            
             return Disposables.create()
-            
         }
     }
 }
