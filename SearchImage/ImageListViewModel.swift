@@ -15,12 +15,12 @@ class ImageListViewModel {
     var searchFlag = PublishRelay<Bool>()
     
     var showDetailViewImage = PublishRelay<Document>()
-//        var showDetailView = PublishRelay<Document>()
     
     init (){
-        searchKeyword.debounce(.seconds(1), scheduler: MainScheduler.instance).flatMap( RequsetAPI.fetchImagesRx(_:) ).subscribe(onNext:{ self.searchResult.accept($0) })
+        searchKeyword.debounce(.seconds(1), scheduler: ConcurrentDispatchQueueScheduler.init(qos: .background)).flatMap( RequsetAPI.fetchImagesRx(_:) ).subscribe(onNext:{ self.searchResult.accept($0)
+        })
         
-        searchResult.flatMap(emptyCheck(_:)).subscribe(onNext:{self.searchFlag.accept($0)})
+        searchResult.flatMap(emptyCheck(_:)).observe(on: ConcurrentDispatchQueueScheduler.init(qos: .background)).subscribe(onNext:{self.searchFlag.accept($0)})
     }
     func emptyCheck(_ result: [Document]) -> Observable<Bool>{
         return Observable.create(){ emitter in
@@ -28,13 +28,10 @@ class ImageListViewModel {
                 emitter.onNext(false)
                 emitter.onCompleted()
             }
+            
             emitter.onNext(true)
             emitter.onCompleted()
             return Disposables.create()
         }
-        
-        
     }
-    
-  
 }

@@ -8,8 +8,6 @@
 import UIKit
 import RxSwift
 import RxCocoa
-//import RxViewController
-
 
 class ViewController: UIViewController{
 
@@ -20,15 +18,7 @@ class ViewController: UIViewController{
     let viewModel = ImageListViewModel()
     let cellIndentifier = "cell"
     var emptySearchFlag = true
-    
-    var isSearching: Bool {
-            let searchController = self.navigationItem.searchController
-            let isActive = searchController?.isActive ?? false
-            let isSearchBarHasText = searchController?.searchBar.text?.isEmpty == false
-            return isActive && isSearchBarHasText
-        }
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
     
@@ -37,21 +27,14 @@ class ViewController: UIViewController{
 
         collectionCellUI()
         
-        viewModel.searchResult
-            .observe(on: MainScheduler.instance)
-            .bind(to: collectionView.rx.items(cellIdentifier: cellIndentifier, cellType: ImageCollectionViewCell.self)) { index, item, cell in
-                let data = try? Data(contentsOf: URL(string: item.thumbnailURL)!)
-                cell.cellImage.image = UIImage(data: data!)
-                cell.layer.cornerRadius = 2
-            }
-            .disposed(by: disposeBag)
-        
+        //셀이 선택했을때 선택된 값을 showDetailViewImage(PublishRelay)에 넘겨준다.
         Observable.zip(collectionView.rx.itemSelected, collectionView.rx.modelSelected(Document.self))
             .bind{ [weak self] indexPath, model in
                 self?.collectionView.deselectItem(at: indexPath, animated: true)
                 self?.viewModel.showDetailViewImage.accept(model)
             }.disposed(by: disposeBag)
         
+        //segue가 실행될때 showDetailViewImage(PublishRelay)의 값을 sender로 넘겨준다
         viewModel.showDetailViewImage
             .subscribe(onNext: { [weak self] document in
                 self?.performSegue(withIdentifier: DetailViewController.identifier,
@@ -73,7 +56,6 @@ class ViewController: UIViewController{
                 vc?.document = document
 //                print(document)
             }
-
         }
     }
     
@@ -101,9 +83,20 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UISearchResultsUpd
         if let keyword = searchController.searchBar.text{
 
             if keyword.count == 0{
+                disposeBag = DisposeBag()
                 viewModel.searchResult.accept([])
+                
+                viewModel.searchResult
+                    .observe(on: MainScheduler.instance)
+                    .bind(to: collectionView.rx.items(cellIdentifier: cellIndentifier, cellType: ImageCollectionViewCell.self)) { index, item, cell in
+                        let data = try? Data(contentsOf: URL(string: item.thumbnailURL)!)
+                        cell.cellImage.image = UIImage(data: data!)
+                        cell.layer.cornerRadius = 2
+                    }
+                    .disposed(by: disposeBag)
             }
             else{
+
                 viewModel.searchKeyword.accept(keyword)
             }
         }
@@ -120,8 +113,6 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UISearchResultsUpd
         self.navigationController?.navigationBar.prefersLargeTitles = true
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
-        
-//        searchController.hidesNavigationBarDuringPresentation = false
     }
 }
 
