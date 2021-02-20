@@ -8,6 +8,7 @@
 import UIKit
 import RxCocoa
 import RxSwift
+import CoreGraphics
 //import RxViewController
 
 class DetailViewController: UIViewController {
@@ -20,12 +21,13 @@ class DetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Do any additional setup after loading the view.
-        
+        self.navigationController?.navigationBar.prefersLargeTitles = false
+
         UIsetting()
     }
-    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+    }
     
     func UIsetting(){
         let date = timeDecode(document!.datetime)
@@ -40,8 +42,23 @@ class DetailViewController: UIViewController {
                 let url = URL(string: imageUrl)
                 let data = try Data(contentsOf: url!)
                 let image = UIImage(data: data)
+                let imageViewRatio = (image?.size.height)! / (image?.size.width)!
+                
+               
                 DispatchQueue.main.async {
-                    self?.imageView.image = image
+                    
+//                    print(image?.size.width,image?.size.height)
+//                    print(self?.imageView.frame.size.width,self?.imageView.frame.size.height)
+//                    print()
+                    let scale = (self?.imageView.frame.size.width)! / (image?.size.width)!
+                    let newImage = self?.resize(image: image!, scale: scale)
+                    let newHeight = (self?.imageView.frame.width)! * imageViewRatio
+                    self?.imageView.frame.size = CGSize(width: (self?.imageView.frame.width)!, height: newHeight)
+                    self?.imageView.image = newImage
+//                    print(newImage?.size.width,newImage?.size.height)
+//                    print(self?.imageView.frame.size.width,self?.imageView.frame.size.height)
+//                    print()
+//                    print()
                 }
             }
             catch  {
@@ -50,7 +67,17 @@ class DetailViewController: UIViewController {
         }
     }
     
-    
+    func resize(image: UIImage, scale: CGFloat) -> UIImage
+    {
+        let transform = CGAffineTransform(scaleX: scale, y: scale)
+       let size = image.size.applying(transform)
+       UIGraphicsBeginImageContext(size)
+       image.draw(in: CGRect(origin: .zero, size: size))
+       let resultImage = UIGraphicsGetImageFromCurrentImageContext()
+       UIGraphicsEndImageContext()
+       
+        return resultImage!
+    }
     func timeDecode(_ date: Date) -> String{
 
         let dateFormatter = DateFormatter()
@@ -59,14 +86,6 @@ class DetailViewController: UIViewController {
         return dateFormatter.string(from: date)
 
     }
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
     
 }
+

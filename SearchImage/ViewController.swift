@@ -27,6 +27,7 @@ class ViewController: UIViewController{
             let isSearchBarHasText = searchController?.searchBar.text?.isEmpty == false
             return isActive && isSearchBarHasText
         }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,9 +71,6 @@ class ViewController: UIViewController{
             let vc = segue.destination as? DetailViewController
             if let document = sender as? Document{
                 vc?.document = document
-//                vc?.date = timeDecode(document.datetime)
-//                vc?.imageUrl = document.imageURL
-//                vc?.site = document.displaySitename
 //                print(document)
             }
 
@@ -101,6 +99,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UISearchResultsUpd
     
     func updateSearchResults(for searchController: UISearchController) {
         if let keyword = searchController.searchBar.text{
+
             if keyword.count == 0{
                 viewModel.searchResult.accept([])
             }
@@ -108,20 +107,21 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UISearchResultsUpd
                 viewModel.searchKeyword.accept(keyword)
             }
         }
+        
         viewModel.searchFlag.accept(true)
     }
     
     func setupSearchController() {
         let searchController = UISearchController(searchResultsController: nil)
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "검색할 키워드를 입력해 주세요."
-        searchController.hidesNavigationBarDuringPresentation = false
         
-        self.navigationController?.navigationBar.prefersLargeTitles = true
+        searchController.searchBar.placeholder = "검색할 키워드를 입력해 주세요."
         self.navigationItem.searchController = searchController
         self.navigationItem.title = "Daum 이미지 검색"
-        self.navigationItem.hidesSearchBarWhenScrolling = false
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        
+//        searchController.hidesNavigationBarDuringPresentation = false
     }
 }
 
