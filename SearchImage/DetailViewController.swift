@@ -9,7 +9,7 @@ import UIKit
 import RxCocoa
 import RxSwift
 import CoreGraphics
-//import RxViewController
+
 
 class DetailViewController: UIViewController {
     @IBOutlet weak var imageView: UIImageView!
@@ -46,19 +46,11 @@ class DetailViewController: UIViewController {
                 
                
                 DispatchQueue.main.async {
-                    
-//                    print(image?.size.width,image?.size.height)
-//                    print(self?.imageView.frame.size.width,self?.imageView.frame.size.height)
-//                    print()
                     let scale = (self?.imageView.frame.size.width)! / (image?.size.width)!
                     let newImage = self?.resize(image: image!, scale: scale)
                     let newHeight = (self?.imageView.frame.width)! * imageViewRatio
                     self?.imageView.frame.size = CGSize(width: (self?.imageView.frame.width)!, height: newHeight)
                     self?.imageView.image = newImage
-//                    print(newImage?.size.width,newImage?.size.height)
-//                    print(self?.imageView.frame.size.width,self?.imageView.frame.size.height)
-//                    print()
-//                    print()
                 }
             }
             catch  {

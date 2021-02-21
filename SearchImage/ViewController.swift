@@ -16,10 +16,8 @@ class ViewController: UIViewController{
     var disposeBag = DisposeBag()
     let viewModel = ImageListViewModel()
     let cellIndentifier = "cell"
-    var emptySearchFlag = true
     var searchText = ""
     var documents: [Document] = []
-    var originDocuments: [Document] = []
     var fetchCount = 1
     var scrollFlag = true
     var disposeBag1 = DisposeBag()

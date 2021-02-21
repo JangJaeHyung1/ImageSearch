@@ -11,13 +11,7 @@ import Alamofire
 let DidReceiveDocumentNotification: Notification.Name = Notification.Name("DidReceiveDocument")
 
 func fetchImages(_ keyword: String,fehtchCount: Int){
-    var size = 30
-//    if fehtchCount == 2{
-//        size = 60
-//    }else{
-//        size = 30
-//    }
-    
+    let size = 30
     
     let urlString: String =  "https://dapi.kakao.com/v2/search/image?sort=accuracy&page=\(fehtchCount)&query=\(keyword)&size=\(size)"
     let encodedString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
