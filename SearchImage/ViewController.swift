@@ -157,12 +157,11 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UISearchResultsUpd
 //                viewModel.searchMoreResult.subscribe(onNext:{value in
 //                    print(value.count)
 //                }).disposed(by: disposeBag)
-                
-                
-                    
+                // 1. 인피니티 스크롤 동작하면 fetchImages로 다음페이지 30장을 가져온다.
             }
             if(documents.count == 30){
                 print(documents.count)
+                // 2. 가져와지면(documents는 추가로 가져온 데이터에 대한 배열, 기존 0) viewModel.searchResult에 append 작업을 하고싶은데 안됨
                 
 //                viewModel.searchResult
 //                    .map{$0 + self.documents}
@@ -172,9 +171,10 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UISearchResultsUpd
 //                    })
 //                    .disposed(by: disposeBag)
                 
-                
 //                viewModel.searchResult.map{$0+self.documents}
 //                viewModel.searchResult.accept($0)
+                
+               // 3. append 작업을 하고나면 documents 배열 []으로
                 documents = []
                 scrollFlag = false
             }
