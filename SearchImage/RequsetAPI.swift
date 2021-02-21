@@ -52,7 +52,6 @@ class RequsetAPI{
                     
                     
                     if let response = try? decoder.decode(Response.self, from: data){
-                        
                         emitter.onNext(response.documents)
                         emitter.onCompleted()
                     }

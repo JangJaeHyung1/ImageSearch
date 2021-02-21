@@ -10,13 +10,21 @@ import RxSwift
 import RxRelay
 
 class ImageListViewModel {
+    
+//    enum Action {
+//        case search([Document])
+//        case searchMore([Document])
+//    }
     var searchResult = PublishRelay<[Document]>()
+    var searchMoreResult = PublishRelay<[Document]>()
+    
     var searchKeyword = PublishRelay<String>()
     var searchFlag = PublishRelay<Bool>()
     
     var showDetailViewImage = PublishRelay<Document>()
     
     init (){
+        
         searchKeyword.debounce(.seconds(1), scheduler: ConcurrentDispatchQueueScheduler.init(qos: .background)).flatMap( RequsetAPI.fetchImagesRx(_:) ).subscribe(onNext:{ self.searchResult.accept($0)
         })
         

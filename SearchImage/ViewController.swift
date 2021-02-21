@@ -10,7 +10,6 @@ import RxSwift
 import RxCocoa
 
 class ViewController: UIViewController{
-
     @IBOutlet weak var collectionView: UICollectionView!
     
     @IBOutlet weak var lblSearchFlag: UILabel!
@@ -18,6 +17,11 @@ class ViewController: UIViewController{
     let viewModel = ImageListViewModel()
     let cellIndentifier = "cell"
     var emptySearchFlag = true
+    var searchText = ""
+    var documents: [Document] = []
+    var originDocuments: [Document] = []
+    var fetchCount = 1
+    var scrollFlag = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +30,16 @@ class ViewController: UIViewController{
         self.setupSearchController()
 
         collectionCellUI()
+        
+        viewModel.searchResult
+            .observe(on: MainScheduler.instance)
+            .bind(to: collectionView.rx.items(cellIdentifier: cellIndentifier, cellType: ImageCollectionViewCell.self)) { index, item, cell in
+                let data = try? Data(contentsOf: URL(string: item.thumbnailURL)!)
+                cell.cellImage.image = UIImage(data: data!)
+                cell.layer.cornerRadius = 2
+
+            }
+            .disposed(by: disposeBag)
         
         //셀이 선택했을때 선택된 값을 showDetailViewImage(PublishRelay)에 넘겨준다.
         Observable.zip(collectionView.rx.itemSelected, collectionView.rx.modelSelected(Document.self))
@@ -45,6 +59,8 @@ class ViewController: UIViewController{
         viewModel.searchFlag
             .bind(to: lblSearchFlag.rx.isHidden)
             .disposed(by: disposeBag)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.didReceiveDocuments(_:)), name: DidReceiveDocumentNotification, object: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -59,45 +75,34 @@ class ViewController: UIViewController{
         }
     }
     
-    
-    
-}
-extension ViewController: UICollectionViewDelegateFlowLayout, UISearchResultsUpdating{
-    
-    func collectionCellUI(){
-        let interval:CGFloat = 5
-        let flowLayout: UICollectionViewFlowLayout
-        flowLayout = UICollectionViewFlowLayout()
-        flowLayout.sectionInset = UIEdgeInsets.init(top: interval , left: interval, bottom: 0, right: interval)
-        flowLayout.minimumInteritemSpacing = interval
-        flowLayout.minimumLineSpacing = interval
-        let width: CGFloat = ( UIScreen.main.bounds.width - interval) / 3
-        flowLayout.itemSize = CGSize(width: width - interval, height: width - interval)
+    @objc func didReceiveDocuments(_ noti: Notification){
+        guard let documents: [Document] = noti.userInfo?["documents"] as? [Document] else {
+            
+            return
+        }
         
-        self.collectionView.collectionViewLayout = flowLayout
-        self.collectionView.reloadData()
+        self.documents = documents
+        
     }
     
+}
+extension ViewController: UICollectionViewDelegateFlowLayout, UISearchResultsUpdating, UIScrollViewDelegate , UICollectionViewDelegate{
     
     func updateSearchResults(for searchController: UISearchController) {
         if let keyword = searchController.searchBar.text{
-
+            
             if keyword.count == 0{
-                disposeBag = DisposeBag()
+//                disposeBag = DisposeBag()
                 viewModel.searchResult.accept([])
+                documents = []
+                fetchCount = 1
+                //데이터가 바뀌면 여기 셀에 뿌리도록 바인딩
                 
-                viewModel.searchResult
-                    .observe(on: MainScheduler.instance)
-                    .bind(to: collectionView.rx.items(cellIdentifier: cellIndentifier, cellType: ImageCollectionViewCell.self)) { index, item, cell in
-                        let data = try? Data(contentsOf: URL(string: item.thumbnailURL)!)
-                        cell.cellImage.image = UIImage(data: data!)
-                        cell.layer.cornerRadius = 2
-                    }
-                    .disposed(by: disposeBag)
             }
             else{
-
+                searchText = keyword
                 viewModel.searchKeyword.accept(keyword)
+                scrollFlag = false
             }
         }
         
@@ -113,6 +118,69 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UISearchResultsUpd
         self.navigationController?.navigationBar.prefersLargeTitles = true
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
+    }
+    
+    func collectionCellUI(){
+        let interval:CGFloat = 5
+        let flowLayout: UICollectionViewFlowLayout
+        flowLayout = UICollectionViewFlowLayout()
+        flowLayout.sectionInset = UIEdgeInsets.init(top: interval , left: interval, bottom: 0, right: interval)
+        flowLayout.minimumInteritemSpacing = interval
+        flowLayout.minimumLineSpacing = interval
+        let width: CGFloat = ( UIScreen.main.bounds.width - interval) / 3
+        flowLayout.itemSize = CGSize(width: width - interval, height: width - interval)
+        
+        self.collectionView.collectionViewLayout = flowLayout
+        self.collectionView.reloadData()
+    }
+    
+    private func createSpinenerFooter() -> UIView{
+        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 100))
+        let spinner = UIActivityIndicatorView()
+        spinner.center = footerView.center
+        footerView.addSubview(spinner)
+        spinner.startAnimating()
+        return footerView
+    }
+    
+    //infinite scroll
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let position = scrollView.contentOffset.y
+        if position > (collectionView.contentSize.height - 30 - scrollView.frame.height){
+            if scrollFlag == false{
+                fetchCount += 1
+                print("fetchCount = \(fetchCount)")
+                print("documents.count = \(documents.count)")
+                fetchImages(searchText, fehtchCount: fetchCount)
+                scrollFlag = true
+                
+//                viewModel.searchMoreResult.subscribe(onNext:{value in
+//                    print(value.count)
+//                }).disposed(by: disposeBag)
+                
+                
+                    
+            }
+            if(documents.count == 30){
+                print(documents.count)
+                
+//                viewModel.searchResult
+//                    .map{$0 + self.documents}
+//                    .subscribe(onNext:{
+//                        self.viewModel.searchResult.accept($0)
+//                        print($0.count)
+//                    })
+//                    .disposed(by: disposeBag)
+                
+                
+//                viewModel.searchResult.map{$0+self.documents}
+//                viewModel.searchResult.accept($0)
+                documents = []
+                scrollFlag = false
+            }
+            
+            
+        }
     }
 }
 

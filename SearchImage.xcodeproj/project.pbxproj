@@ -19,6 +19,7 @@
 		D146365E25DA95550067694B /* RequsetAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D146365D25DA95550067694B /* RequsetAPI.swift */; };
 		D146366725DAB9410067694B /* ImageListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D146366625DAB9410067694B /* ImageListViewModel.swift */; };
 		D17ED95525DBCB8F000B8F47 /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = D17ED95425DBCB8F000B8F47 /* test.swift */; };
+		D186EA6225E165E200BCAB2F /* RequsetMoreAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D186EA6125E165E200BCAB2F /* RequsetMoreAPI.swift */; };
 		D1D8600925DBED880012C740 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D1D8600825DBED880012C740 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -38,6 +39,7 @@
 		D146365D25DA95550067694B /* RequsetAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequsetAPI.swift; sourceTree = "<group>"; };
 		D146366625DAB9410067694B /* ImageListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageListViewModel.swift; sourceTree = "<group>"; };
 		D17ED95425DBCB8F000B8F47 /* test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = test.swift; sourceTree = "<group>"; };
+		D186EA6125E165E200BCAB2F /* RequsetMoreAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequsetMoreAPI.swift; sourceTree = "<group>"; };
 		D1D8600825DBED880012C740 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		D93B358E2B77261D941C3C52 /* Pods-SearchImage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SearchImage.release.xcconfig"; path = "Target Support Files/Pods-SearchImage/Pods-SearchImage.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -101,6 +103,7 @@
 				D146365D25DA95550067694B /* RequsetAPI.swift */,
 				D146365125DA64DD0067694B /* ImageCollectionViewCell.swift */,
 				D146366625DAB9410067694B /* ImageListViewModel.swift */,
+				D186EA6125E165E200BCAB2F /* RequsetMoreAPI.swift */,
 				D1D8600825DBED880012C740 /* Main.storyboard */,
 				D146364525DA545C0067694B /* Assets.xcassets */,
 				D146364725DA545C0067694B /* LaunchScreen.storyboard */,
@@ -224,6 +227,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D13594AE25DFB74500D91256 /* DetailViewController.swift in Sources */,
+				D186EA6225E165E200BCAB2F /* RequsetMoreAPI.swift in Sources */,
 				D146364125DA54590067694B /* ViewController.swift in Sources */,
 				D146363D25DA54590067694B /* AppDelegate.swift in Sources */,
 				D146365225DA64DD0067694B /* ImageCollectionViewCell.swift in Sources */,
