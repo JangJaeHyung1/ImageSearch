@@ -31,6 +31,7 @@ class ViewController: UIViewController{
 
         collectionCellUI()
         
+        //데이터가 바뀌면 셀에 뿌리도록 바인딩
         viewModel.searchResult
             .observe(on: MainScheduler.instance)
             .bind(to: collectionView.rx.items(cellIdentifier: cellIndentifier, cellType: ImageCollectionViewCell.self)) { index, item, cell in
@@ -93,10 +94,12 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UISearchResultsUpd
             
             if keyword.count == 0{
 //                disposeBag = DisposeBag()
-                viewModel.searchResult.accept([])
-                documents = []
                 fetchCount = 1
-                //데이터가 바뀌면 여기 셀에 뿌리도록 바인딩
+                documents = []
+                viewModel.searchResult.accept([])
+                
+                
+                
                 
             }
             else{
@@ -151,32 +154,44 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UISearchResultsUpd
                 fetchCount += 1
                 print("fetchCount = \(fetchCount)")
                 print("documents.count = \(documents.count)")
+                
+                // 1. 인피니티 스크롤 동작하면 fetchImages로 다음페이지 30장을 가져온다.
                 fetchImages(searchText, fehtchCount: fetchCount)
                 scrollFlag = true
                 
 //                viewModel.searchMoreResult.subscribe(onNext:{value in
 //                    print(value.count)
 //                }).disposed(by: disposeBag)
-                // 1. 인피니티 스크롤 동작하면 fetchImages로 다음페이지 30장을 가져온다.
+                
             }
-            if(documents.count == 30){
-                print(documents.count)
+            if(documents.count != 0){
+                print("documents.count = \(documents.count)")
+                
                 // 2. 가져와지면(documents는 추가로 가져온 데이터에 대한 배열, 기존 0) viewModel.searchResult에 append 작업을 하고싶은데 안됨
                 
-//                viewModel.searchResult
-//                    .map{$0 + self.documents}
+//                viewModel.searchResult.reduce(<#T##seed: A##A#>, accumulator: <#T##(A, [Document]) throws -> A#>)
 //                    .subscribe(onNext:{
 //                        self.viewModel.searchResult.accept($0)
 //                        print($0.count)
 //                    })
 //                    .disposed(by: disposeBag)
                 
-//                viewModel.searchResult.map{$0+self.documents}
+                Observable.of(viewModel.searchResult.value).map{$0 + self.documents}
+                    .subscribe(onNext:{
+                        self.viewModel.searchResult.accept($0)
+                })
+                .disposed(by: disposeBag)
+//                viewModel.searchResult
 //                viewModel.searchResult.accept($0)
                 
                // 3. append 작업을 하고나면 documents 배열 []으로
-                documents = []
-                scrollFlag = false
+                viewModel.searchResult.subscribe(onNext:{print("count = \($0.count)")
+                                                    print("self.fetchCount = \(self.fetchCount)")
+                                                    if $0.count == self.fetchCount * 30 {
+                    self.scrollFlag = false
+                    self.documents = []
+                } }).disposed(by: disposeBag)
+                
             }
             
             

@@ -15,7 +15,7 @@ class ImageListViewModel {
 //        case search([Document])
 //        case searchMore([Document])
 //    }
-    var searchResult = PublishRelay<[Document]>()
+    var searchResult = BehaviorRelay<[Document]>(value: [])
     var searchMoreResult = PublishRelay<[Document]>()
     
     var searchKeyword = PublishRelay<String>()
