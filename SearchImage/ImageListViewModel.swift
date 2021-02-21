@@ -16,9 +16,10 @@ class ImageListViewModel {
 //        case searchMore([Document])
 //    }
     var searchResult = BehaviorRelay<[Document]>(value: [])
-    var searchMoreResult = PublishRelay<[Document]>()
+//    var searchMoreResult = PublishRelay<[Document]>()
     
     var searchKeyword = PublishRelay<String>()
+    
     var searchFlag = PublishRelay<Bool>()
     
     var showDetailViewImage = PublishRelay<Document>()
@@ -36,7 +37,7 @@ class ImageListViewModel {
                 emitter.onNext(false)
                 emitter.onCompleted()
             }
-            
+
             emitter.onNext(true)
             emitter.onCompleted()
             return Disposables.create()

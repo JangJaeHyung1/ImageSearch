@@ -22,6 +22,7 @@ class ViewController: UIViewController{
     var originDocuments: [Document] = []
     var fetchCount = 1
     var scrollFlag = true
+    var disposeBag1 = DisposeBag()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +31,32 @@ class ViewController: UIViewController{
         self.setupSearchController()
 
         collectionCellUI()
+        bindStream()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.didReceiveDocuments(_:)), name: DidReceiveDocumentNotification, object: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
+        if segue.identifier == DetailViewController.identifier {
+            let vc = segue.destination as? DetailViewController
+            if let document = sender as? Document{
+                vc?.document = document
+//                print(document)
+            }
+        }
+    }
+    
+    @objc func didReceiveDocuments(_ noti: Notification){
+        guard let documents: [Document] = noti.userInfo?["documents"] as? [Document] else {
+            return
+        }
+        self.documents = documents
+    }
+    
+    
+    func bindStream(){
         
         //데이터가 바뀌면 셀에 뿌리도록 바인딩
         viewModel.searchResult
@@ -60,47 +87,19 @@ class ViewController: UIViewController{
         viewModel.searchFlag
             .bind(to: lblSearchFlag.rx.isHidden)
             .disposed(by: disposeBag)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(self.didReceiveDocuments(_:)), name: DidReceiveDocumentNotification, object: nil)
     }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-        if segue.identifier == DetailViewController.identifier {
-            let vc = segue.destination as? DetailViewController
-            if let document = sender as? Document{
-                vc?.document = document
-//                print(document)
-            }
-        }
-    }
-    
-    @objc func didReceiveDocuments(_ noti: Notification){
-        guard let documents: [Document] = noti.userInfo?["documents"] as? [Document] else {
-            
-            return
-        }
-        
-        self.documents = documents
-        
-    }
-    
 }
+
+
 extension ViewController: UICollectionViewDelegateFlowLayout, UISearchResultsUpdating, UIScrollViewDelegate , UICollectionViewDelegate{
     
     func updateSearchResults(for searchController: UISearchController) {
+        viewModel.searchFlag.accept(true)
         if let keyword = searchController.searchBar.text{
-            
             if keyword.count == 0{
-//                disposeBag = DisposeBag()
                 fetchCount = 1
                 documents = []
                 viewModel.searchResult.accept([])
-                
-                
-                
-                
             }
             else{
                 searchText = keyword
@@ -108,7 +107,6 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UISearchResultsUpd
                 scrollFlag = false
             }
         }
-        
         viewModel.searchFlag.accept(true)
     }
     
@@ -152,49 +150,34 @@ extension ViewController: UICollectionViewDelegateFlowLayout, UISearchResultsUpd
         if position > (collectionView.contentSize.height - 30 - scrollView.frame.height){
             if scrollFlag == false{
                 fetchCount += 1
-                print("fetchCount = \(fetchCount)")
-                print("documents.count = \(documents.count)")
                 
                 // 1. 인피니티 스크롤 동작하면 fetchImages로 다음페이지 30장을 가져온다.
                 fetchImages(searchText, fehtchCount: fetchCount)
                 scrollFlag = true
-                
-//                viewModel.searchMoreResult.subscribe(onNext:{value in
-//                    print(value.count)
-//                }).disposed(by: disposeBag)
+
                 
             }
             if(documents.count != 0){
-                print("documents.count = \(documents.count)")
                 
-                // 2. 가져와지면(documents는 추가로 가져온 데이터에 대한 배열, 기존 0) viewModel.searchResult에 append 작업을 하고싶은데 안됨
-                
-//                viewModel.searchResult.reduce(<#T##seed: A##A#>, accumulator: <#T##(A, [Document]) throws -> A#>)
-//                    .subscribe(onNext:{
-//                        self.viewModel.searchResult.accept($0)
-//                        print($0.count)
-//                    })
-//                    .disposed(by: disposeBag)
-                
+                // 2. 가져와지면(documents는 추가로 가져온 데이터에 대한 배열, 기존 0) viewModel.searchResult에 append 작업
+
+                //1회성 값전달
                 Observable.of(viewModel.searchResult.value).map{$0 + self.documents}
                     .subscribe(onNext:{
                         self.viewModel.searchResult.accept($0)
                 })
-                .disposed(by: disposeBag)
-//                viewModel.searchResult
-//                viewModel.searchResult.accept($0)
+                .disposed(by: disposeBag1)
+                disposeBag1 = DisposeBag()
                 
                // 3. append 작업을 하고나면 documents 배열 []으로
-                viewModel.searchResult.subscribe(onNext:{print("count = \($0.count)")
-                                                    print("self.fetchCount = \(self.fetchCount)")
-                                                    if $0.count == self.fetchCount * 30 {
-                    self.scrollFlag = false
-                    self.documents = []
-                } }).disposed(by: disposeBag)
+                viewModel.searchResult.subscribe(onNext:{ [weak self] in
+                                                    if $0.count == self!.fetchCount * 30 {
+                    self?.scrollFlag = false
+                    self?.documents = []
+                } }).disposed(by: disposeBag1)
+                disposeBag1 = DisposeBag()
                 
             }
-            
-            
         }
     }
 }
