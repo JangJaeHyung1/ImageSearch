@@ -9,6 +9,7 @@ debounce로 검색키워드에 대한 Observable을 1초의 시간뒤 emit되도
 인피니티 스크롤 시 30개씩 이미지를 추가로 불러옵니다.
 
 
+https://youtu.be/IcKxjbDUwKY 시현 영상입니다
 
 
 1.초기 화면
