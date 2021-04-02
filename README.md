@@ -1,6 +1,6 @@
 # ImageSearch
 
-## 브랜디  LABs MA팀 Senior iOS 채용 과제
+## 브랜디  LABs MA팀 Senior iOS 채용 과제 
 ### 카카오 'Daum 검색 - 이미지 검색' api를 사용하여 이미지 검색 앱만들기
 
 1. 과제사항
@@ -26,19 +26,25 @@
 [ ] Test 코드 구현
 [ x ] Error 핸들링
 
-#### Search ViewController 
+
+
+### Search ViewController 
 [ x ] 검색어 입력 후 1초지나면 debounce로 검색키워드에 대한 Observable을 1초의 시간뒤 emit되도록 함.
 [ x ] 검색결과가 없을 시 '결과없음' text 출력 
 [ x ] 30개씩 페이징 후 스크롤 시 30개씩 fetch 추가
 
-#### DetailImage ViewController
+
+
+### DetailImage ViewController
 [ x ] 요구 UI 준수
 [ x ] 이미지 세로로 길 경우 스크롤
 
 
 
-https://youtu.be/IcKxjbDUwKY 시현 영상입니다
+https://youtu.be/IcKxjbDUwKY 시현 영상입니다.
 
+
+### 시현 이미지
 
 1.초기 화면
 
