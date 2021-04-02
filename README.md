@@ -22,22 +22,22 @@
 
 2. 우대사항
 
-[ x ] RxSwift 사용
-[ ] Test 코드 구현
-[ x ] Error 핸들링
+- [x] RxSwift 사용
+- [ ] Test 코드 구현
+- [x] Error 핸들링
 
 
 
 ### Search ViewController 
-[ x ] 검색어 입력 후 1초지나면 debounce로 검색키워드에 대한 Observable을 1초의 시간뒤 emit되도록 함.
-[ x ] 검색결과가 없을 시 '결과없음' text 출력 
-[ x ] 30개씩 페이징 후 스크롤 시 30개씩 fetch 추가
+- [x] 검색어 입력 후 1초지나면 debounce로 검색키워드에 대한 Observable을 1초의 시간뒤 emit되도록 함.
+- [x] 검색결과가 없을 시 '결과없음' text 출력 
+- [x] 30개씩 페이징 후 스크롤 시 30개씩 fetch 추가
 
 
 
 ### DetailImage ViewController
-[ x ] 요구 UI 준수
-[ x ] 이미지 세로로 길 경우 스크롤
+- [x] 요구 UI 준수
+- [x] 이미지 세로로 길 경우 스크롤
 
 
 
