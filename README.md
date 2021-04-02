@@ -24,7 +24,7 @@
 
 - [x] RxSwift 사용
 - [ ] Test 코드 구현
-- [x] Error 핸들링
+- [x] Error 핸들링 (guardlet 과 do-catch 사용)
 
 
 
