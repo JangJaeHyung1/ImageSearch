@@ -3,8 +3,8 @@
 ## 브랜디  LABs MA팀 Senior iOS 채용 과제 
 ### 카카오 'Daum 검색 - 이미지 검색' api를 사용하여 이미지 검색 앱만들기
 
-1. 과제사항
 
+1. 과제사항
 * 카카오 Developer 계정 사용.
 * UISearchBar에 문자를 입력 후 1초가 지나면 자동으로 검색.
 * 검색어가 변경되면 목록 리셋 후 다시 데이터를 fetch 합니다.
@@ -21,7 +21,6 @@
 
 
 2. 우대사항
-
 - [x] RxSwift 사용
 - [ ] Test 코드 구현
 - [x] Error 핸들링 (guardlet 과 do-catch 사용)
