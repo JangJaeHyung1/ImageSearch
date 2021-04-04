@@ -1,6 +1,6 @@
 # ImageSearch
 
-## 브랜디  LABs MA팀 Senior iOS 채용 과제 
+## 브랜디  LABs MA팀 iOS 채용 과제 
 ### 카카오 'Daum 검색 - 이미지 검색' api를 사용하여 이미지 검색 앱만들기
 
 
