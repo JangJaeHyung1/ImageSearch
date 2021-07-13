@@ -3,6 +3,11 @@
 
 ### 'Daum 검색 - 이미지 검색' api를 사용하여 이미지 검색 앱만들기
 
+### Search ViewController 
+- [x] 검색어 입력 후 1초지나면 debounce로 검색키워드에 대한 Observable을 1초의 시간뒤 emit되도록 함.
+- [x] 검색결과가 없을 시 '결과없음' text 출력 
+- [x] 30개씩 페이징 후 스크롤 시 30개씩 fetch 추가
+
 
 #### 1. 요구사항
 * 카카오 Developer 계정 사용.
@@ -24,12 +29,6 @@
 - [ ] Test 코드 구현
 - [x] Error 핸들링 (guardlet 과 do-catch 사용)
 
-
-
-### Search ViewController 
-- [x] 검색어 입력 후 1초지나면 debounce로 검색키워드에 대한 Observable을 1초의 시간뒤 emit되도록 함.
-- [x] 검색결과가 없을 시 '결과없음' text 출력 
-- [x] 30개씩 페이징 후 스크롤 시 30개씩 fetch 추가
 
 
 
