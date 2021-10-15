@@ -9,7 +9,7 @@
 - [x] 30개씩 페이징 후 스크롤 시 30개씩 fetch 추가
 
 
-#### 1. 구현사항
+#### 1. 구현 부분
 * 카카오 Developer 계정 사용.
 * UISearchBar에 문자를 입력 후 1초가 지나면 자동으로 검색.
 * 검색어가 변경되면 목록 리셋 후 다시 데이터를 fetch 합니다.
@@ -22,7 +22,7 @@
   - response 데이터에 출처 'display_sitename', 문서 작성 시간 'datetime'이 있을 경우 전체화면 이미지 밑에 표시해 줍니다.
 
 
-#### 2. 추가사항
+#### 2. 추가적인 부분
 - [x] RxSwift 사용
 - [ ] Test 코드 구현
 - [x] Error 핸들링 (guardlet 과 do-catch 사용)
