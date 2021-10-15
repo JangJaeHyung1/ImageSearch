@@ -31,7 +31,7 @@
 
 
 ### DetailImage ViewController
-- [x] UI 준수
+- [x] 이미지 비율 준수
 - [x] 이미지 세로로 길 경우 스크롤
 
 
